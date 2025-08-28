@@ -2,7 +2,7 @@ import './App.css'
 import React, {useState} from 'react'
 import Count from './components/Count'
 import ChangeBgColor from  './components/BgColor'
-
+import DetailsForm from './components/DetailsForm'
 function App() {
     const[BgColor, setBgColor] = useState("white")
  
@@ -13,6 +13,7 @@ function App() {
         <ChangeBgColor onClick={()=> setBgColor('red')} label="Red "/>
         <ChangeBgColor onClick={()=> setBgColor('blue')}label="blue"/>
         <ChangeBgColor onClick={()=> setBgColor('green')}label="Green"/>
+          <DetailsForm/>
       </div>
     )
 }

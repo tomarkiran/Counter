@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+.form label {
+  margin-bottom: 5px; 
+}
+
+.form input,
+.form select {
+  margin-bottom: 5px; 
+}
+
+.error {
+  color: red;
+  margin-top: 5px; 
+}

@@ -8,54 +8,41 @@ const DetailsForm = () => {
     gender: "",
     skills: [],
     country: "",
-  });
-
-  const [errors, setErrors] = useState({})
-
+  })
+const [errors, setErrors] = useState({})
  const isValidPhoneNumber = (phoneNumber) => {
     const phoneRegex = /^\d{10}$/
     return phoneRegex.test(phoneNumber)
   }
-
-  const validateForm = () => {
+   const validateForm = () => {
     let newErrors = {}
-
     if (!formData.name.trim()) {
       newErrors.name = "Name is Required"
     }
-
     if (!formData.age) {
       newErrors.age = "Age is Required";
     } else if (Number(formData.age) <= 0) {
       newErrors.age = "Age must be a positive number"
     }
-
-    if (!formData.phoneNumber) {
+     if (!formData.phoneNumber) {
       newErrors.phoneNumber = "Phone Number is Required"
     } else if (!isValidPhoneNumber(formData.phoneNumber)) {
       newErrors.phoneNumber = "Phone number must be exactly 10 digits";
     }
-
     if (!formData.gender) {
       newErrors.gender = "Gender is Required"
     }
-
     if (formData.skills.length === 0) {
       newErrors.skills = "Select at least one skill"
     }
-
     if (!formData.country) {
       newErrors.country = "Country is Required"
     }
-
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = (e) => {
+   }
+    const handleSubmit = (e) => {
     e.preventDefault()
-
     const isValid = validateForm()
     if (isValid) {
       console.log("Form Submitted", formData)
@@ -64,13 +51,11 @@ const DetailsForm = () => {
       console.log("Form Validation Failed")
     }
   }
-
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
-
-  const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     let updatedSkills = [...formData.skills]
     if (checked) {
@@ -79,9 +64,8 @@ const DetailsForm = () => {
       updatedSkills = updatedSkills.filter((skill) => skill !== name)
     }
     setFormData({ ...formData, skills: updatedSkills })
-  };
-
-  return (
+  }
+    return (
     <form className="form" onSubmit={handleSubmit}>
       <div>
         <label>Name:</label>
@@ -94,7 +78,6 @@ const DetailsForm = () => {
         />
         {errors.name && <div className="error">{errors.name}</div>}
       </div>
-
       <div>
         <label>Age:</label>
         <input
@@ -106,7 +89,6 @@ const DetailsForm = () => {
         />
         {errors.age && <div className="error">{errors.age}</div>}
       </div>
-
       <div>
         <label>Phone Number:</label>
         <input
@@ -120,7 +102,6 @@ const DetailsForm = () => {
           <div className="error">{errors.phoneNumber}</div>
         )}
       </div>
-
       <div>
         <label>Country:</label>
         <select
@@ -135,8 +116,7 @@ const DetailsForm = () => {
         </select>
         {errors.country && <div className="error">{errors.country}</div>}
       </div>
-
-      <div>
+    <div>
         <label>Skills:</label>
         <label>
           <input
@@ -167,7 +147,6 @@ const DetailsForm = () => {
         </label>
         {errors.skills && <div className="error">{errors.skills}</div>}
       </div>
-
       <div>
         <label>Gender:</label>
         <label>
@@ -192,10 +171,8 @@ const DetailsForm = () => {
         </label>
         {errors.gender && <div className="error">{errors.gender}</div>}
       </div>
-
       <button type="submit">Submit</button>
     </form>
   )
 }
-
 export default DetailsForm;

@@ -1,201 +1,133 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const DetailsForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    age: "",
-    phoneNumber: "",
-    gender: "",
-    skills: [],
-    country: "",
-  });
+  const [submittedData, setSubmittedData] = useState(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset
+  } = useForm({ mode: "onChange" })
 
-  const [errors, setErrors] = useState({})
-
- const isValidPhoneNumber = (phoneNumber) => {
-    const phoneRegex = /^\d{10}$/
-    return phoneRegex.test(phoneNumber)
+  function onSubmit(data) {
+    setSubmittedData(data)
+    reset()
   }
-
-  const validateForm = () => {
-    let newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is Required"
-    }
-
-    if (!formData.age) {
-      newErrors.age = "Age is Required";
-    } else if (Number(formData.age) <= 0) {
-      newErrors.age = "Age must be a positive number"
-    }
-
-    if (!formData.phoneNumber) {
-      newErrors.phoneNumber = "Phone Number is Required"
-    } else if (!isValidPhoneNumber(formData.phoneNumber)) {
-      newErrors.phoneNumber = "Phone number must be exactly 10 digits";
-    }
-
-    if (!formData.gender) {
-      newErrors.gender = "Gender is Required"
-    }
-
-    if (formData.skills.length === 0) {
-      newErrors.skills = "Select at least one skill"
-    }
-
-    if (!formData.country) {
-      newErrors.country = "Country is Required"
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    const isValid = validateForm()
-    if (isValid) {
-      console.log("Form Submitted", formData)
-      alert("Form Submitted Successfully!")
-    } else {
-      console.log("Form Validation Failed")
-    }
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    let updatedSkills = [...formData.skills]
-    if (checked) {
-      updatedSkills.push(name)
-    } else {
-      updatedSkills = updatedSkills.filter((skill) => skill !== name)
-    }
-    setFormData({ ...formData, skills: updatedSkills })
-  };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          placeholder="Enter your Name"
-          onChange={handleChange}
+    <div className="container">
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-group">
+          <label>Name:</label>
+          <input {...register('name', { required: "Name is Required" })} />
+          {errors.name && <p className="error">{errors.name.message}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Age:</label>
+          <input
+            type="number"
+            {...register('age', {
+              required: "Age is required",
+              min: { value: 1, message: "Age must be positive" }
+            })}
+          />
+          {errors.age && <p className="error">{errors.age.message}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Phone Number:</label>
+          <input
+            {...register('phoneNumber', {
+              required: "Phone Number is Required",
+              pattern: {
+                value: /^\d{10}$/,
+                message: "Phone Number must be of 10 digits"
+              }
+            })}
+          />
+          {errors.phoneNumber && <p className="error">{errors.phoneNumber.message}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Country:</label>
+          <select {...register('country', { required: "Country is required" })}>
+            <option value="">--Select Country--</option>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+          </select>
+          {errors.country && <p className="error">{errors.country.message}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Skills:</label>
+          <label>
+            <input type="checkbox" value="React" {...register("skills", { required: "Please select at least one skill" })} /> React
+          </label>
+          <label>
+            <input type="checkbox" value="Node" {...register("skills", { required: "Please select at least one skill" })} /> Node
+          </label>
+          <label>
+            <input type="checkbox" value="JavaScript" {...register("skills", { required: "Please select at least one skill" })} /> JavaScript
+          </label>
+          {errors.skills && <p className="error">{errors.skills.message}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Gender:</label>
+          <label>
+            <input type="radio" value="Male" {...register("gender", { required: "Gender is required" })} /> Male
+          </label>
+          <label>
+            <input type="radio" value="Female" {...register("gender", { required: "Gender is required" })} /> Female
+          </label>
+          {errors.gender && <p className="error">{errors.gender.message}</p>}
+        </div>
+
+        <input 
+          type="submit" 
+          className="submit-btn"  
+          disabled={!isValid}  
         />
-        {errors.name && <div className="error">{errors.name}</div>}
-      </div>
+      </form>
 
-      <div>
-        <label>Age:</label>
-        <input
-          type="number"
-          name="age"
-          value={formData.age}
-          placeholder="Enter your Age"
-          onChange={handleChange}
-        />
-        {errors.age && <div className="error">{errors.age}</div>}
-      </div>
-
-      <div>
-        <label>Phone Number:</label>
-        <input
-          type="text"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          placeholder="Enter your Phone Number"
-          onChange={handleChange}
-        />
-        {errors.phoneNumber && (
-          <div className="error">{errors.phoneNumber}</div>
-        )}
-      </div>
-
-      <div>
-        <label>Country:</label>
-        <select
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-        >
-          <option value="">Select Country</option>
-          <option value="india">India</option>
-          <option value="usa">USA</option>
-          <option value="uk">UK</option>
-        </select>
-        {errors.country && <div className="error">{errors.country}</div>}
-      </div>
-
-      <div>
-        <label>Skills:</label>
-        <label>
-          <input
-            type="checkbox"
-            name="react"
-            checked={formData.skills.includes("react")}
-            onChange={handleCheckboxChange}
-          />
-          React
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="node"
-            checked={formData.skills.includes("node")}
-            onChange={handleCheckboxChange}
-          />
-          Node
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="javascript"
-            checked={formData.skills.includes("javascript")}
-            onChange={handleCheckboxChange}
-          />
-          JavaScript
-        </label>
-        {errors.skills && <div className="error">{errors.skills}</div>}
-      </div>
-
-      <div>
-        <label>Gender:</label>
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="Female"
-            checked={formData.gender === "Female"}
-            onChange={handleChange}
-          />
-          Female
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="gender"
-            value="Male"
-            checked={formData.gender === "Male"}
-            onChange={handleChange}
-          />
-          Male
-        </label>
-        {errors.gender && <div className="error">{errors.gender}</div>}
-      </div>
-
-      <button type="submit">Submit</button>
-    </form>
+      {submittedData && (
+        <div className="card">
+          <h3>Submitted Data</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td><strong>Name:</strong></td>
+                <td>{submittedData.name}</td>
+              </tr>
+              <tr>
+                <td><strong>Age:</strong></td>
+                <td>{submittedData.age}</td>
+              </tr>
+              <tr>
+                <td><strong>Phone Number:</strong></td>
+                <td>{submittedData.phoneNumber}</td>
+              </tr>
+              <tr>
+                <td><strong>Country:</strong></td>
+                <td>{submittedData.country}</td>
+              </tr>
+              <tr>
+                <td><strong>Skills:</strong></td>
+                <td>{submittedData.skills.join(", ")}</td>
+              </tr>
+              <tr>
+                <td><strong>Gender:</strong></td>
+                <td>{submittedData.gender}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
   )
 }
 
-export default DetailsForm;
+export default DetailsForm

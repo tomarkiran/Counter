@@ -13,7 +13,7 @@ function App() {
         <ChangeBgColor onClick={()=> setBgColor('red')} label="Red "/>
         <ChangeBgColor onClick={()=> setBgColor('blue')}label="blue"/>
         <ChangeBgColor onClick={()=> setBgColor('green')}label="Green"/>
-          <DetailsForm/>
+        <DetailsForm/>
       </div>
     )
 }

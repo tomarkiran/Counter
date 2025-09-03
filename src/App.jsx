@@ -4,7 +4,8 @@ import './App.css'
 // import ChangeBgColor from './components/BgColor'
 // import DetailsForm from './components/DetailsForm'
 // import TodoList from './components/TodoList'
-import UserTable from './components/UserTable'
+//import UserTable from './components/UserTable'
+import Weather from './components/Weather'
 
 function App() {
   // const [bgColor, setBgColor] = useState("white")
@@ -17,7 +18,8 @@ function App() {
       <ChangeBgColor onClick={() => setBgColor('green')} label="Green"/>
       <DetailsForm/> */}
       {/* <TodoList/> */}
-      <UserTable />
+      {/* <UserTable /> */}
+      <Weather />
     </div>
   )
 }
